@@ -12,10 +12,12 @@ import org.openqa.selenium.WebElement;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.options.BaseOptions;
+import operacoes.Somar;
 
 public class Calculos {
 
   private AndroidDriver driver;
+  private Somar opSomar;
 
   @BeforeEach
   public void setUp() {
@@ -34,27 +36,16 @@ public class Calculos {
         .amend("appium:connectHardwareKeyboard", true);
 
     driver = new AndroidDriver(this.getUrl(), options);
+    opSomar = new Somar(driver);
   }
 
   @Test
   public void sampleTest() {
-    WebElement dgt2 = driver.findElement(AppiumBy.id("com.google.android.calculator:id/digit_2"));
-    dgt2.click();
-
-    WebElement dgt5 = driver.findElement(AppiumBy.id("com.google.android.calculator:id/digit_5"));
-    dgt5.click();
-
-    WebElement btnSomar = driver.findElement(AppiumBy.id("com.google.android.calculator:id/op_add"));
-    btnSomar.click();
-
-    WebElement dgt7 = driver.findElement(AppiumBy.id("com.google.android.calculator:id/digit_7"));
-    dgt7.click();
-
-    dgt5.click();
-
-    WebElement btnIgual = driver.findElement(AppiumBy.id("com.google.android.calculator:id/eq"));
-    btnIgual.click();
-
+    opSomar.digito(75); 
+    opSomar.btnSomar();
+    opSomar.digito(25);
+    opSomar.clicarIgual();
+    
     WebElement displayResultado = driver.findElement(AppiumBy.id("com.google.android.calculator:id/result_final"));
     assertEquals("100", displayResultado.getText());
 
