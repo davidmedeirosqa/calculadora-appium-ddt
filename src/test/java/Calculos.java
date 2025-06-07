@@ -7,17 +7,19 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.WebElement;
 
-import io.appium.java_client.AppiumBy;
+import commons.Common;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.options.BaseOptions;
 import operacoes.Somar;
+import operacoes.Subtrair;
 
 public class Calculos {
 
   private AndroidDriver driver;
+  private Common common;
   private Somar opSomar;
+  private Subtrair opSub;
 
   @BeforeEach
   public void setUp() {
@@ -36,19 +38,40 @@ public class Calculos {
         .amend("appium:connectHardwareKeyboard", true);
 
     driver = new AndroidDriver(this.getUrl(), options);
+    common = new Common(driver);
     opSomar = new Somar(driver);
+    opSub = new Subtrair(driver);
   }
 
   @Test
   public void sampleTest() {
-    opSomar.digito(75); 
-    opSomar.btnSomar();
-    opSomar.digito(25);
-    opSomar.clicarIgual();
-    
-    WebElement displayResultado = driver.findElement(AppiumBy.id("com.google.android.calculator:id/result_final"));
-    assertEquals("100", displayResultado.getText());
 
+    // Declaração de valor
+    int numero1 = 500;
+    int numero2 = 500;
+    
+    // int resultadoMult = numero1 * numero2;
+    // int resultadoDiv = numero1 / numero2;
+
+    // ## Soma ##
+    common.digito(numero1);
+    opSomar.clicarSomar();
+    common.digito(numero2);
+    common.clicarIgual();
+
+    // Validação da soma
+    int resultadoEsperadoSoma = numero1 + numero2;
+    assertEquals(String.valueOf(resultadoEsperadoSoma), common.resultadoFinal());
+
+    // ### Subtrair ####
+    common.digito(numero1);
+    opSub.clicarSub();
+    common.digito(numero2);
+    common.clicarIgual();
+
+    // Validação da subtração
+    int resultadoEsperadoSub = numero1 - numero2;
+    assertEquals(String.valueOf(resultadoEsperadoSub), common.resultadoFinal());
   }
 
   @AfterEach

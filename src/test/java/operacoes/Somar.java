@@ -13,22 +13,9 @@ public class Somar {
         this.driver = driver;
     }
 
-    public void digito(int numero) {
-        String numeroStr = String.valueOf(numero);
-        for (char digito : numeroStr.toCharArray()) {
-            WebElement dgt = driver.findElement(AppiumBy.id("com.google.android.calculator:id/digit_" + digito));
-            dgt.click();
-        }
-    }
-
-    public void btnSomar() {
+    // Operação Somar
+    public void clicarSomar() {
         WebElement btnSomar = driver.findElement(AppiumBy.id("com.google.android.calculator:id/op_add"));
         btnSomar.click();
     }
-
-    public void clicarIgual() {
-        WebElement btnIgual = driver.findElement(AppiumBy.id("com.google.android.calculator:id/eq"));
-        btnIgual.click();
-    }
-
 }
