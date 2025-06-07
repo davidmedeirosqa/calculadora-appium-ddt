@@ -2,10 +2,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DecimalFormat;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.openqa.selenium.Capabilities;
 
 import commons.Common;
@@ -49,12 +51,9 @@ public class Calculos {
     opDiv = new Divisao(driver);
   }
 
-  @Test
-  public void sampleTest() {
-
-    // Declaração de valor
-    int numero1 = 100;
-    int numero2 = 2;
+  @ParameterizedTest
+  @CsvFileSource(resources = "csv/digitos.csv", numLinesToSkip = 1, delimiter = ',')
+  public void executarOperacoes(int numero1, int numero2) {
 
     // ## Soma ##
     common.digito(numero1);
@@ -91,13 +90,13 @@ public class Calculos {
 
     // Validação da divisão
     double resultadoEsperadoDiv = (double) numero1 / numero2;
-    String resultadoCalculadora = common.resultadoFinal().replace(",", ".");
-
+    String resultadoCalculadora = common.resultadoFinal().replace(".",",");
+    DecimalFormat df = new DecimalFormat("#.#############");
     String resultadoFormatado;
     if (resultadoEsperadoDiv % 1 == 0) {
       resultadoFormatado = String.valueOf((int) resultadoEsperadoDiv);
     } else {
-      resultadoFormatado = String.valueOf(resultadoEsperadoDiv);
+      resultadoFormatado = df.format(resultadoEsperadoDiv);
     }
     assertEquals(resultadoFormatado, resultadoCalculadora);
   }
