@@ -18,4 +18,5 @@ public class Subtrair {
         WebElement btnSub = driver.findElement(AppiumBy.id("com.google.android.calculator:id/op_sub"));
         btnSub.click();
     }
+
 }

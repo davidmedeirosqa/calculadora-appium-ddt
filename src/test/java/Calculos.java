@@ -11,6 +11,8 @@ import org.openqa.selenium.Capabilities;
 import commons.Common;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.options.BaseOptions;
+import operacoes.Divisao;
+import operacoes.Multiplicacao;
 import operacoes.Somar;
 import operacoes.Subtrair;
 
@@ -20,6 +22,8 @@ public class Calculos {
   private Common common;
   private Somar opSomar;
   private Subtrair opSub;
+  private Multiplicacao opMulti;
+  private Divisao opDiv;
 
   @BeforeEach
   public void setUp() {
@@ -41,17 +45,16 @@ public class Calculos {
     common = new Common(driver);
     opSomar = new Somar(driver);
     opSub = new Subtrair(driver);
+    opMulti = new Multiplicacao(driver);
+    opDiv = new Divisao(driver);
   }
 
   @Test
   public void sampleTest() {
 
     // Declaração de valor
-    int numero1 = 500;
-    int numero2 = 500;
-    
-    // int resultadoMult = numero1 * numero2;
-    // int resultadoDiv = numero1 / numero2;
+    int numero1 = 100;
+    int numero2 = 2;
 
     // ## Soma ##
     common.digito(numero1);
@@ -60,8 +63,7 @@ public class Calculos {
     common.clicarIgual();
 
     // Validação da soma
-    int resultadoEsperadoSoma = numero1 + numero2;
-    assertEquals(String.valueOf(resultadoEsperadoSoma), common.resultadoFinal());
+    assertEquals(String.valueOf(numero1 + numero2), common.resultadoFinal());
 
     // ### Subtrair ####
     common.digito(numero1);
@@ -70,8 +72,34 @@ public class Calculos {
     common.clicarIgual();
 
     // Validação da subtração
-    int resultadoEsperadoSub = numero1 - numero2;
-    assertEquals(String.valueOf(resultadoEsperadoSub), common.resultadoFinal());
+    assertEquals(String.valueOf(numero1 - numero2), common.resultadoFinal());
+
+    // ### Multiplicação ###
+    common.digito(numero1);
+    opMulti.clicarMulti();
+    common.digito(numero2);
+    common.clicarIgual();
+
+    // Validação da multiplicação
+    assertEquals(String.valueOf(numero1 * numero2), common.resultadoFinal());
+
+    // ### Divisão ###
+    common.digito(numero1);
+    opDiv.clicarDiv();
+    common.digito(numero2);
+    common.clicarIgual();
+
+    // Validação da divisão
+    double resultadoEsperadoDiv = (double) numero1 / numero2;
+    String resultadoCalculadora = common.resultadoFinal().replace(",", ".");
+
+    String resultadoFormatado;
+    if (resultadoEsperadoDiv % 1 == 0) {
+      resultadoFormatado = String.valueOf((int) resultadoEsperadoDiv);
+    } else {
+      resultadoFormatado = String.valueOf(resultadoEsperadoDiv);
+    }
+    assertEquals(resultadoFormatado, resultadoCalculadora);
   }
 
   @AfterEach
